@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="manifest" href="/icon/site.webmanifest">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Titillium+Web:wght@200&display=swap"
+        rel="stylesheet">
+    <title>Task Manager</title>
+</head>
+
+<body>
+    <% if(success && success.length){ %>
+    <div class="success">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <%= success %>
+    </div>
+    <% } %>
+
+    <% if(error && error.length){ %>
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <%= error %>
+    </div>
+    <% } %>
+    <% const taskArray = [];  %>
+    <% for(task of tasks) {taskArray.unshift(task);} %>
+
+    <div class="card outline" style="width: 32rem;">
+        <img src="/images/task-bg.png" class="card-img-top image-task" alt="tasks">
+        <div class="card-body p-2">
+            <h5 class="card-title px-2">Your Tasks</h5>
+            <div class="task-container p-2 my-2 bg-light bg-gradient">
+                <% if(tasks.length == 0){ %>
+                <div class="row">
+                    <p class="notask">You have no tasks. Add a new task.</p>
+                </div>
+                <% } %>
+
+                <% for(task of taskArray){ %>
+                <div class="row">
+                    <div class="form-check card my-2 col-8 task-card">
+                        <div class="modal-body py-2 singletask">
+                            <input type="checkbox" value="<%= task._id %>" id="task" />
+                            <label class="form-check-label checkboxDefault" for="task"><%= task.task %></label>
+                            <form action="/taskmanager/<%= task._id %>?_method=DELETE" method="POST" class="trash">
+                                <button class="link" type="submit" id="deletebtn"><i
+                                        class="fa-solid fa-trash trash-icon"></i>
+                                </button>
+                            </form>
+                            <a href="/taskmanager/<%= task._id %>/edit">
+                                <i class="fa-solid fa-pencil pencil"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-4 py-2 clock">
+                        <i class="fa-solid fa-clock clock-icon"></i>
+                        <div>
+                            <span class="duedate-display"><%= task.duedate %></span>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+            <form action="/taskmanager" method="POST" class="tasks-panel">
+                <div class="card bg-light bg-gradient p-2" id="buttonspane">
+                    <div class="form-outline my-2 onclick-display">
+                        <label class="form-label" for="form12">Enter your task</label>
+                        <input type="text" id="form12" class="form-control text-box" placeholder="Enter your task"
+                            name="task" />
+                    </div>
+                    <div class="form-outline my-2 onclick-display">
+                        <label class="form-label" for="form12">Enter the due date</label>
+                        <input type="text" placeholder="Enter the Due Date" id="form12" class="form-control text-box"
+                            onfocus="(this.type='date')" name="duedate">
+                    </div>
+                    <div class="opacity-100 button-pane">
+                        <div class="task-btn" id="new-task-div">
+                            <button class="btn btn-success" id="newtask" type="button">New Task</button>
+                        </div>
+                        <div class="task-btn onclick-display" id="add-task">
+                            <button class="btn btn-primary" id="addtask" type="submit">Add Task</button>
+                        </div>
+                        <div class="task-btn close-btn" id="close-btn">
+                            <button class="btn btn-danger" id="closebtn" type="button">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="module" src="/JS/home.js"></script>
+</body>
+
+</html>
